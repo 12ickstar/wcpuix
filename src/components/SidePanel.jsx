@@ -53,7 +53,7 @@ export default function SidePanel() {
             <ProfileOptions />
             </div>
             </div>
-            <div className="h-[15vh] border-b-2 border-[#9CA3AF] relative">
+            <div className="h-[10vh] border-b-2 border-[#9CA3AF] relative">
             <label htmlFor="search" className="text-gray-400 focus-within:text-gray-600 block">
             <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +77,7 @@ export default function SidePanel() {
             />
             </div>
 
-            <div className="fixed h-[70vh] w-1/3 overflow-hidden border-r-4 border-[#D1D5DB] flex">
+            <div className="fixed h-[80vh] w-1/3 overflow-hidden border-r-4 border-[#D1D5DB] flex">
             <ul className="w-full overflow-x-hidden overflow-y-auto list-none pb-3">
             {personLists.map((person) => (
                 <div key={person.id}>

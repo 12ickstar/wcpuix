@@ -4,7 +4,7 @@ import { MainContext } from "../MainContext";
 import ChatOptions from "./ChatOptions";
 import SideOver from "./SideOver";
 
-const ChatPanel = () => {
+export default function ChatPanel() {
     const { value, setValue } = useContext(MainContext);
     const [open, setOpen] = useState(false);
 
@@ -24,7 +24,7 @@ const ChatPanel = () => {
             </div>
         ) : (
             <>
-            <div className="h-[15vh] flex justify-between bg-[#6366F1] p-5">
+            <div className="h-[10vh] flex justify-between bg-[#6366F1] p-5">
             <div className="flex cursor-pointer" onClick={() => setOpen(!open)}>
             <img
             src={value.img}
@@ -54,7 +54,7 @@ const ChatPanel = () => {
             cryptoId={value.cryptoId}
             />
             </div>
-            <div className="flex bg-[#6366F1] p-5 absolute w-full bottom-0">
+            <div className="flex bg-[#6366F1] pl-5 pr-5 py-2.5 absolute w-full bottom-0">
             <div className="flex self-center">
             <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +96,7 @@ const ChatPanel = () => {
             </div>
             <input
             type="text"
-            className="w-full border-2 border-black rounded-[100px] mr-3 h-[45px] self-center"
+            className="w-full border-2 border-black rounded-md mr-3 h-[45px] self-center focus:outline-none px-2 text-2xl"
             />
             <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -112,5 +112,3 @@ const ChatPanel = () => {
         </>
     );
 };
-
-export default ChatPanel;
