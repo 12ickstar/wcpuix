@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router , Route, Switch } from "react-router-dom";
+import "./styles/output.css";
+import Home from "./pages/Home";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
+import Chat from "./pages/Chat";
+import React , {useState} from 'react';
+import {HomeContext} from './MainContext';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    const [Value , setValue] = useState({'Myname':'','Myaddrs':'','HomeState':true,'UserExist':false,'saap':'','dee':''});
+    
+    function renderpages(){
+        if (localStorage.getItem('CHATSTATE') == 'TRUE'){return <Chat />} else {
+            if (Value.HomeState){return <Home />} else {if (Value.UserExist){return <Login />} else {return <SignUp />}}
+        };
+    };
+
+    return (
+        <HomeContext.Provider value={{Value,setValue}}>
+        {renderpages()}
+        </HomeContext.Provider>
+    );
+};
 
 export default App;
