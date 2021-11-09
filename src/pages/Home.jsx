@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import {HomeContext} from '../MainContext';
-import {useState , useContext} from 'react';
+import {useContext} from 'react';
 
 export default function Home(){
     const {Value , setValue} = useContext(HomeContext);

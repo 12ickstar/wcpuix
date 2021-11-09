@@ -1,23 +1,46 @@
-import { useState } from "react";
+import { useState , useContext , useEffect} from "react";
 import ChatPanel from "../components/ChatPanel";
 import SidePanel from "../components/SidePanel";
-import { MainContext } from "../MainContext";
+import * as IPFS from "ipfs-core";
+import * as CryptoJS from "crypto-js";
+import {MainContext , HomeContext} from "../MainContext";
 
-const Chat = () => {
-  const [value, setValue] = useState(MainContext);
+export default function Chat (){
+    const [value, setvalue] = useState({name: '',img: null,cryptoId: '',EDITPFVARS:'',});
+    const {Value , setValue} = useContext(HomeContext);
 
-  return (
-    <MainContext.Provider value={{ value, setValue }}>
-      <div className="grid grid-cols-3 h-screen">
-        <div className="border-r-4 border-[#D1D5DB] relative">
-          <SidePanel />
-        </div>
-        <div className="col-span-2 relative">
-          <ChatPanel />
-        </div>
-      </div>
-    </MainContext.Provider>
-  );
+    useEffect(() => {
+        async function run(){
+            const ipfs = await IPFS.create({repo: 'ok' + Math.random()});
+            try {var rndmc = (CryptoJS.AES.decrypt(localStorage.getItem('RANDOMCHARS'),Value.passx).toString(CryptoJS.enc.Utf8));
+            }catch(err){console.log(err.message);alert("Invalid Credentials")};
+            var entypedata = localStorage.getItem('DATA');
+            var datax = (CryptoJS.AES.decrypt(entypedata,Value.passx + rndmc).toString(CryptoJS.enc.Utf8)).split(";");
+            for await (const chunk of ipfs.cat(datax[1])) {
+                var chunkx = new TextDecoder().decode(chunk)
+                setvalue({...value,EDITPFVARS:(CryptoJS.AES.decrypt(chunkx,datax[0])).toString(CryptoJS.enc.Utf8),LOADCHAT:true});
+            };
+        };run();
+    },[]); 
+
+    function renderl(){
+        if (value.LOADCHAT === true){
+            return (
+                <div className="grid grid-cols-3 h-screen">
+                <div className="border-r-4 border-[#D1D5DB] relative">
+                <SidePanel />
+                </div>
+                <div className="col-span-2 relative">
+                <ChatPanel />
+                </div>
+                </div>
+
+            );
+        }
+    }
+    return (
+        <MainContext.Provider value={{value,setvalue}}>
+        {renderl()}
+        </MainContext.Provider>
+    );
 };
-
-export default Chat;

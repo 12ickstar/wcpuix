@@ -12,28 +12,27 @@ export default function Login(){
 
     const submitHandler = (e) => {
         e.preventDefault();
-        
+
         var scph = (data.secretPhrase).replace(/\s/g,'');
         try {var rndmc = (AES.decrypt(localStorage.getItem('RANDOMCHARS'),(data.password)+scph)).toString(CryptoJS.enc.Utf8);
         }catch(err){console.log(err.message);alert("Invalid Credentials")};
         var entypedata = localStorage.getItem('DATA');
-        var datax = AES.decrypt(entypedata,data.password+scph+rndmc).toString(CryptoJS.enc.Utf8);
-        try {var verifykey = ((new ethers.Wallet(data.pk)).address).toString()} catch(err){console.log(err.message);alert("Invalid Private Key")};
-        console.log(rndmc);console.log(datax)
+        try {var datax = AES.decrypt(entypedata,data.password+scph+rndmc).toString(CryptoJS.enc.Utf8);}catch(err){alert("Invalid Private Key")};
+        try {var verifykey = ((new ethers.Wallet(data.pk)).address).toString()} catch(err){alert("Invalid Private Key")};
 
-        if ((data.password).length < 8 || (data.password).length > 101 || ([...(data.password)]).every(val => onlychars.includes(val)) == false){
-            alert("Invalid Passowrd");
-        } else if (((data.secretPhrase).split(" ")).length < 5 || ((data.secretPhrase).split(" ")).length > 15){
-            alert("Invalid Secret Phrase");
-        } else if (verifykey !== data.address) {
-            alert("Invalid Private Key");
-        } else if (datax.slice(0,12) != "xHAHAITWORKS" || rndmc.slice(0,12) != "xHAHAITWORKS") {
-            alert("Credentials are Invalid");
-        } else {
-            localStorage.setItem('CHATSTATE','TRUE');
-            setValue({...Value,ChatState:true})
-            console.log(data);
-        }
+        try {
+            if ((data.password).length < 8 || (data.password).length > 101 || ([...(data.password)]).every(val => onlychars.includes(val)) === false){
+                alert("Invalid Passowrd");
+            } else if (((data.secretPhrase).split(" ")).length < 5 || ((data.secretPhrase).split(" ")).length > 15){
+                alert("Invalid Secret Phrase");
+            } else if (verifykey !== data.address) {
+                alert("Invalid Private Key");
+            } else if (datax.slice(0,12) !== "xHAHAITWORKS" || rndmc.slice(0,12) !== "xHAHAITWORKS") {
+                alert("Credentials are Invalid");
+            } else {
+                setValue({...Value,passx:((data.password)+scph),ChatState:true,pk:data.pk});
+            }
+        } catch(err){alert("Invalid Credentials")}
     };
 
     return (

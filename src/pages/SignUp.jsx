@@ -23,7 +23,7 @@ export default function SignUp(){
         var ipfshash = (await ipfs.add(pfdata)).cid.toString();
 
         var encryptdata = AES.encrypt(enkey+";"+ipfshash,data.password+((data.sphr).replace(/\s/g,''))+radmc);
-        var radmc = AES.encrypt(radmc,data.password+((data.sphr).replace(/\s/g,''))).toString()
+        radmc = AES.encrypt(radmc,data.password+((data.sphr).replace(/\s/g,''))).toString()
         localStorage.setItem('RANDOMCHARS',radmc);
         localStorage.setItem('DATA',encryptdata);
         localStorage.setItem('USEREXIST','TRUE');
@@ -42,7 +42,7 @@ export default function SignUp(){
         e.preventDefault();
         if (data.password !== data.rePassword) {
             alert("Passowrd doesn't match.");
-        } else if ((data.password).length < 8 || (data.password).length > 101 || ([...(data.password)]).every(val => onlychars.includes(val)) == false){
+        } else if ((data.password).length < 8 || (data.password).length > 101 || ([...(data.password)]).every(val => onlychars.includes(val)) === false){
             alert("Invalid Passowrd");
         } else if (((data.sphr).split(" ")).length < 5 || ((data.sphr).split(" ")).length > 15){
             alert("Invalid Secret Phrase");
