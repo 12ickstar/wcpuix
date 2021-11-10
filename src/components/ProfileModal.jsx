@@ -1,15 +1,52 @@
 import { Fragment, useState , useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { HomeContext } from "../MainContext";
+import { HomeContext , MainContext } from "../MainContext";
+import * as IPFS from "ipfs-core";
+import * as CryptoJS from "crypto-js";
+import Web3 from 'web3';
 import axios from "axios";
 
 export default function ProfileModal({open,setOpen,showAddress,setShowAddress}) {
+    const url = "https://polygon-mumbai.g.alchemy.com/v2/aecFxKElwcjPOLm7BRos6xEpzJHWT-uD";
+    const web3  =  new Web3(url);
+
     const [address, setAddress] = useState();
     const {Value , setValue} = useContext(HomeContext);
-    
+    const {value , setvalue} = useContext(MainContext);
+
     const submitHandler = (e) => {
         e.preventDefault();
-        axios.get(`/invitex/${Value.Myaddrs}/${(Value.pk).toString()}/${address.toString()}`).then(res => {console.log(res.data)}); 
+        axios.get(`/chatx/${(Value.pk).toString()}/${'TRUE'}`);
+        alert('It takes around 30 secons to send a request');
+
+        async function requestInvite(){
+            var msg;
+            var reqcontractadrs;
+            axios.get(`/invitex/`).then(res => {reqcontractadrs = res.data.contract});
+            web3.utils.toHex(`WCPXWALLETLINKREQUESTED:${reqcontractadrs}`);
+            var tx = await web3.eth.accounts.signTransaction({'to':address,'value':'1000000000','gas':2000000,'data':msg},Value.pk);
+            web3.eth.sendSignedTransaction(tx.rawTransaction).then((receipt)=>{console.log(receipt);});
+
+            const ipfs = await IPFS.create({repo: 'ok' + Math.random()});
+            try {var rndmc = (CryptoJS.AES.decrypt(localStorage.getItem('RANDOMCHARS'),Value.passx).toString(CryptoJS.enc.Utf8));
+            }catch(err){console.log(err.message);alert("Invalid Credentials")};
+            var entypedata = localStorage.getItem('DATA');
+            var datax = (CryptoJS.AES.decrypt(entypedata,Value.passx + rndmc).toString(CryptoJS.enc.Utf8)).split(";");
+            for await (const chunk of ipfs.cat(datax[1])) {
+                var chunkx = new TextDecoder().decode(chunk)
+                var chunkxval = JSON.parse((CryptoJS.AES.decrypt(chunkx,datax[0])).toString(CryptoJS.enc.Utf8))
+            };
+            var inchatdata = chunkxval["chatdata"];
+            inchatdata.push({'name': address,'cryptoId': address,'clstate':'REQUESTED','ContractAt':reqcontractadrs});
+            chunkxval["chatdata"] = inchatdata;
+            var ipfshash = (await ipfs.add(CryptoJS.AES.encrypt(JSON.stringify(chunkxval),datax[0]).toString())).cid.toString();
+            datax[1] = ipfshash;
+            localStorage.setItem('DATA',CryptoJS.AES.encrypt(datax.join(";"),Value.passx + rndmc).toString());
+            console.log("done");
+            setvalue({...value,EDITPFVARS:JSON.stringify(chunkxval)}); 
+        };
+
+        setTimeout(requestInvite(),30000);
         setOpen(false);
     };
 

@@ -6,105 +6,16 @@ import EditPanel from "./EditPanel";
 import ProfileOptions from "./ProfileOptions";
 import ProfileModal from "./ProfileModal";
 
-export default function SidePanel() {   
+
+export default function SidePanel() {
+
     const { value, setvalue } = useContext(MainContext);
+    const [basicval , setbasicval] = useState();
     const [openEditPanel, setOpenEditPanel] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [showAddress, setShowAddress] = useState(false);
-
-    var personLists = [
-        {
-            id: 0,
-            avatarImg: avatar,
-            name: 'Raj Arora',
-            cryptoId: '0XDR#$FGHGrwrFyu82319837RX412313131141',
-            message: 'I am at the meeting. I will talk to you later'
-        },
-        {
-            id: 1,
-            avatarImg: avatar,
-            name: 'Jhonnathan Ma',
-            cryptoId: '0XDR#$FGHGrwrFyu82319837RX412312856141',
-            message: 'Would you like to go to mall? Ig sale going on there'
-        },
-        {
-            id: 2,
-            avatarImg: avatar,
-            name: 'Yuta Oktutsu',
-            cryptoId: '0XDR#$FGHG2kshrFyu82319837RX412313464131141',
-            message: 'sup bro'
-        },
-        {
-            id: 3,
-            avatarImg: avatar,
-            name: 'Sameed Ali',
-            cryptoId: '0XDR#$FGHekhjerFyu82319837RX4935783131141',
-            message: 'yo are you free this sunday?'
-        },
-        {
-            id: 4,
-            avatarImg: avatar,
-            name: 'Itadori Yuji',
-            cryptoId: '0XDR#$FGHGrwrFyu82319837RX412313131141',
-            message: 'hahahaha that was funny'
-        },
-        {
-            id: 5,
-            avatarImg: avatar,
-            name: 'Mr. Gupta',
-            cryptoId: '0XDR#$FGHGrsgsgFyu823137RX4r64613131141',
-            message: 'Sir the work is done please let me when would you'
-        },
-        {
-            id: 6,
-            avatarImg: avatar,
-            name: 'Eren Jager',
-            cryptoId: '0XDR#$FGHGrwrFyusfjshjRX41jehgj3131141',
-            message: 'I am working all day these days'
-        },
-        {
-            id: 7,
-            avatarImg: avatar,
-            name: 'Oliver Jhones',
-            cryptoId: '0XDR#$FGHGrwrFyu8sjfs837RX4aksfgj141',
-            message: 'wanna meet at coffee?'
-        },
-        {
-            id: 8,
-            avatarImg: avatar,
-            name: 'George Smith',
-            cryptoId: '0XDR#$FGHGrwrkhjd9837RX35131141',
-            message: 'please send your ethereum address'
-        },
-        {
-            id: 9,
-            avatarImg: avatar,
-            name: 'Willam Stevenson',
-            cryptoId: '0XDR#$FGHGrwrFyu82319837RX412313131141',
-            message: 'This chat app is good ig.'
-        },
-        {
-            id: 10,
-            avatarImg: avatar,
-            name: 'Willam',
-            cryptoId: '0XDR#$FGHGrwrFyu82319837jafha3131141',
-            message: 'I am at the meeting. I will talk to you later'
-        },
-        {
-            id: 11,
-            avatarImg: avatar,
-            name: 'Stevenson',
-            cryptoId: '0XDR#$FGHGrwrFyu82319837RX412313131141',
-            message: 'I am at the meeting. I will talk to you later'
-        },
-        {
-            id: 12,
-            avatarImg: avatar,
-            name: 'Wlam Stenson',
-            cryptoId: '0XDR#$FGHGrwrFyu82319837RX412313131141',
-            message: 'I am at the meeting. I will talk to you later'
-        },
-    ]
+    
+    var personLists = (JSON.parse(value.EDITPFVARS)).chatdata
 
     function renderlist(){
         if(personLists.length > 0){
@@ -115,13 +26,13 @@ export default function SidePanel() {
                     <div key={person.id}>
                     <li
                     className="py-4 md:px-1 lg:px-3 cursor-pointer hover:bg-gray-200"
-                    onClick={() => setvalue({...value,name: person.name,img: person.avatarImg, cryptoId: person.cryptoId,chatState:true})}>
+                    onClick={() => setvalue({...value,name: person.name,img: avatar, cryptoId: person.cryptoId,chatState:true})}>
                     <div className="grid grid-cols-6 gap-2">
                     <div>
                     <img src={person.avatarImg} alt="person avatar" className="md:h-[40px] lg:h-[56px] rounded-full object-fill mr-4"/>
                     </div>
                     <div className="self-center col-span-5">
-                    <h1 className="text:base lg:text-lg font-bold">{person.name}</h1>
+                    <h1 className="text:base lg:text-lg font-bold">{person.name}<span>{person.clstate}</span></h1>
                     <div>
                     <p className="text-xs lg:text-sm text-[#6B7280] truncate">{person.message}</p>
                     </div>

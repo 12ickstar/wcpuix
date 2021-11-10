@@ -6,7 +6,7 @@ import * as CryptoJS from "crypto-js";
 import {MainContext , HomeContext} from "../MainContext";
 
 export default function Chat (){
-    const [value, setvalue] = useState({name: '',img: null,cryptoId: '',EDITPFVARS:'',});
+    const [value, setvalue] = useState({name: '',img: null,cryptoId: '',EDITPFVARS:''});
     const {Value , setValue} = useContext(HomeContext);
 
     useEffect(() => {
@@ -18,7 +18,8 @@ export default function Chat (){
             var datax = (CryptoJS.AES.decrypt(entypedata,Value.passx + rndmc).toString(CryptoJS.enc.Utf8)).split(";");
             for await (const chunk of ipfs.cat(datax[1])) {
                 var chunkx = new TextDecoder().decode(chunk)
-                setvalue({...value,EDITPFVARS:(CryptoJS.AES.decrypt(chunkx,datax[0])).toString(CryptoJS.enc.Utf8),LOADCHAT:true});
+                var chunksval = (CryptoJS.AES.decrypt(chunkx,datax[0])).toString(CryptoJS.enc.Utf8)
+                setvalue({...value,EDITPFVARS:chunksval,LOADCHAT:true});
             };
         };run();
     },[]); 
